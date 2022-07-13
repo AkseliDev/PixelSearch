@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelSearch", "PixelSearch\PixelSearch.csproj", "{DA2F4968-A78A-4561-AC37-8C9CA135740E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelSearch.Tests", "PixelSearch.Tests\PixelSearch.Tests.csproj", "{F1DF2333-7BB7-408E-9808-5D6D82956FFB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA2F4968-A78A-4561-AC37-8C9CA135740E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA2F4968-A78A-4561-AC37-8C9CA135740E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA2F4968-A78A-4561-AC37-8C9CA135740E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA2F4968-A78A-4561-AC37-8C9CA135740E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DF2333-7BB7-408E-9808-5D6D82956FFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DF2333-7BB7-408E-9808-5D6D82956FFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DF2333-7BB7-408E-9808-5D6D82956FFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DF2333-7BB7-408E-9808-5D6D82956FFB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D0FB9299-68AA-4DCA-ACDD-B722045D07A5}
+	EndGlobalSection
+EndGlobal
