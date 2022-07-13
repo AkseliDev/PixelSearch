@@ -63,9 +63,11 @@ public static class FastSearch {
                         continue;
                     }
 
+                    int* indexPtr = haystackPtr + currentX + currentY * haystackWidth;
+
                     // loop through the positions and check if every pixel matches with the image
                     for (int index = 0; index < Vector<int>.Count; index++) {
-                        if (MatchAllPixels(imgPtr, haystackPtr + (currentX + index + currentY * haystackWidth), imgWidth, imgHeight, haystackWidth)) {
+                        if (MatchAllPixels(imgPtr, indexPtr++, imgWidth, imgHeight, haystackWidth)) {
                             location = (currentX + index, currentY);
                             return true;
                         }
@@ -93,21 +95,21 @@ public static class FastSearch {
     /// </summary>
     /// <returns><c>true</c> if all pixels match; otherwise, <c>false</c></returns>
     unsafe private static bool MatchAllPixels(int* needlePtr, int* haystackRegion, int width, int height, int rowLength) {
-     
+
         // loop through the pixels to find
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
 
                 // check if every pixel matches
 
                 // we compare integer vs integer, so we dont have to check RGBA individually
                 // also this way we ensure the comparison will work regardless of RGBA order
-                if (needlePtr[x + y * width] != haystackRegion[x + y * rowLength]) {
+                if (*needlePtr++ != haystackRegion[x + y * rowLength]) {
                     return false;
                 }
             }
         }
-
+        
         return true;
     }
 }
