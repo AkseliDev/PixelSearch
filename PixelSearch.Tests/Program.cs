@@ -1,4 +1,5 @@
 ﻿#if WINDOWS
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 #endif
@@ -35,8 +36,8 @@ static void Test_FindImageOnScreen() {
 
 
     // now that we have access to the pixel data, we can finally perform the pixel search
-
     if (FastSearch.FindPixels(
+
             needle: imgData.Scan0, // the needle is the pixel data of the image to be searched
             imgWidth: imageBmp.Width,
             imgHeight: imageBmp.Height,
@@ -51,12 +52,12 @@ static void Test_FindImageOnScreen() {
             clipHeight: ScreenHeight,
 
             out var location // finally the location where the image was found
+
     )) {
         Console.WriteLine($"Image was found at (x: {location.x}, y: {location.y})");
     } else {
         Console.WriteLine("The image could not be found from the screen.");
     }
-
 
     // its important to unlock the memory after the operation
     imageBmp.UnlockBits(imgData);
@@ -64,6 +65,7 @@ static void Test_FindImageOnScreen() {
 }
 
 Test_FindImageOnScreen();
+
 #else
 Console.WriteLine("This test is only available on Windows");
 #endif

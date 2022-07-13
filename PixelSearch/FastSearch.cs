@@ -33,8 +33,6 @@ public static class FastSearch {
             throw new ArgumentOutOfRangeException("clip width and height must be within image dimensions");
         }
 
-
-
         // calculate the last possible position of the clip
         // where the needle image can fit
         int endX = clipX + clipWidth - imgWidth;
@@ -45,7 +43,6 @@ public static class FastSearch {
 
         unsafe {
 
-            
             // get the pointers to the img and haystack
             int* imgPtr = (int*)needle;
             int* haystackPtr = (int*)haystack;
