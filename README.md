@@ -1,6 +1,6 @@
 # PixelSearch
 
-Fast and simple to use Pixel Search. Hardware accelerated with vectorization.
+Fast and simple to use Pixel Search. Hardware accelerated with lightweight vectorization. (WIP)
 
 The library only comes with a pixel array search function which is platform independent.
 Loading of the images and their pixel data is up to the user.
