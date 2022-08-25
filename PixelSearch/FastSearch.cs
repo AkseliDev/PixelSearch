@@ -58,7 +58,6 @@ public static class FastSearch {
                 for (; currentX < vecEndX; currentX += Vector<int>.Count) {
 
                     // check if any pixels in the current position vector match the first pixel of the image
-
                     if (!Vector.EqualsAny(firstPixelScalar, *(Vector<int>*)(haystackPtr + currentX + currentY * haystackWidth))) {
                         continue;
                     }
