@@ -2,12 +2,14 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.CompilerServices;
 #endif
 using PixelSearch;
 
 // the bitmap api is only available on windows
 
 #if WINDOWS
+#pragma warning disable CA1416 // Validate platform compatibility
 static void Test_FindImageOnScreen() {
 
     const string ImageFile = "./resources/Capture.PNG";
@@ -17,6 +19,7 @@ static void Test_FindImageOnScreen() {
 
 
     // first get the image to search
+
     using var imageBmp = new Bitmap(ImageFile);
 
     // then get the screen pixels
@@ -29,11 +32,9 @@ static void Test_FindImageOnScreen() {
     // then copy data from the screen over into the generated bitmap
     graphics.CopyFromScreen(0, 0, 0, 0, new Size(ScreenWidth, ScreenHeight));
 
-
     // to access the raw pixel data of the bitmaps, they need to be locked
     var imgData = imageBmp.LockBits(new Rectangle(Point.Empty, imageBmp.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
     var screenData = screenBmp.LockBits(new Rectangle(Point.Empty, screenBmp.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-
 
     // now that we have access to the pixel data, we can finally perform the pixel search
     if (FastSearch.FindPixels(
@@ -63,6 +64,7 @@ static void Test_FindImageOnScreen() {
     imageBmp.UnlockBits(imgData);
     screenBmp.UnlockBits(screenData);
 }
+#pragma warning restore CA1416 // Validate platform compatibility
 
 Test_FindImageOnScreen();
 
