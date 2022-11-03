@@ -84,7 +84,7 @@ public static class FastSearch {
     /// <returns><c>true</c> if the needle pixels were found from the haystack; otherwise, <c>false</c></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public static bool FindPixels(ref int needle, int imgWidth, int imgHeight, ref int haystack, int haystackWidth, int clipX, int clipY, int clipWidth, int clipHeight, out (int x, int y) location) {
-        
+
         if (clipWidth < imgWidth || clipHeight < imgHeight) {
             throw new ArgumentOutOfRangeException("clip", "clip width and height must be within image dimensions");
         }
@@ -101,9 +101,9 @@ public static class FastSearch {
         Vector<int> firstPixelScalar = new Vector<int>(needle);
 
         for (int currentY = clipY; currentY < endY; currentY++) {
-            
+
             int currentX = clipX;
-            
+
             // first loop the possible vector range
             for (; currentX < vecEndX; currentX += Vector<int>.Count) {
 
@@ -147,22 +147,52 @@ public static class FastSearch {
     /// <param name="height">Height of the needle pixels</param>
     /// <param name="rowLength">Length of one row in the haystack</param>
     /// <returns><c>true</c> if all pixels matched</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool MatchAllPixels(ref int needlePtr, ref int haystackRegion, int width, int height, int rowLength) {
 
-        // loop through the pixels to find
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        if (width < Vector<int>.Count || rowLength < Vector<int>.Count) {
+            // loop through the pixels to find
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
 
-                // check if every pixel matches
+                    // check if every pixel matches
 
-                // we compare integer vs integer, so we dont have to check RGBA individually
-                // also this way we ensure the comparison will work regardless of RGBA order
-                int a = Unsafe.ReadUnaligned<int>(ref Unsafe.As<int, byte>(ref needlePtr));
-                int b = Unsafe.ReadUnaligned<int>(ref Unsafe.As<int, byte>(ref Unsafe.Add(ref haystackRegion, x + y * rowLength)));
-                if (a != b) {
-                    return false;
+                    // we compare integer vs integer, so we dont have to check RGBA individually
+                    // also this way we ensure the comparison will work regardless of RGBA order
+                    int a = Unsafe.ReadUnaligned<int>(ref Unsafe.As<int, byte>(ref needlePtr));
+                    int b = Unsafe.ReadUnaligned<int>(ref Unsafe.As<int, byte>(ref Unsafe.Add(ref haystackRegion, x + y * rowLength)));
+                    if (a != b) {
+                        return false;
+                    }
+                    needlePtr = ref Unsafe.Add(ref needlePtr, 1);
                 }
-                needlePtr = ref Unsafe.Add(ref needlePtr, 1);
+            }
+        } else {
+            for (int y = 0; y < height; y++) {
+                int x = 0;
+
+                for (; x < width - Vector<int>.Count; x += Vector<int>.Count) {
+
+                    Vector<int> a = Unsafe.ReadUnaligned<Vector<int>>(ref Unsafe.As<int,byte>(ref needlePtr));
+                    Vector<int> b = Unsafe.ReadUnaligned<Vector<int>>(ref Unsafe.As<int, byte>(ref Unsafe.Add(ref haystackRegion, x + y * rowLength)));
+                    
+                    // we can do comparison on Vector<int>.Count elements at the same time with vectors
+                    if (a != b) {
+                        return false;
+                    }
+                    
+                    needlePtr = ref Unsafe.Add(ref needlePtr, Vector<int>.Count);
+                }
+                for (; x < width; x++) {
+
+                    // we still need to do scalar comparison for the rest of the pixels
+                    int a = Unsafe.ReadUnaligned<int>(ref Unsafe.As<int, byte>(ref needlePtr));
+                    int b = Unsafe.ReadUnaligned<int>(ref Unsafe.As<int, byte>(ref Unsafe.Add(ref haystackRegion, x + y * rowLength)));
+                    if (a != b) {
+                        return false;
+                    }
+                    needlePtr = ref Unsafe.Add(ref needlePtr, 1);
+                }
             }
         }
 
