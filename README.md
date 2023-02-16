@@ -1,3 +1,6 @@
+## Improved version 2 at: https://github.com/AkseliDev/PixelSearch2
+Archived.
+
 # PixelSearch
 
 Fast and simple to use Pixel Search. Hardware accelerated with lightweight vectorization. (WIP)
